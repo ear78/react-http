@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import {Link} from 'react-router-dom';
 
 import Post from '../../components/Post/Post';
 import './Posts.css';
@@ -45,11 +46,16 @@ class Posts extends React.Component{
         if(!this.state.error){
             //iterating over posts to repeat
             posts = this.state.posts.map(post => {
-                return <Post
-                        key={post.id}
-                        author={post.author}
-                        title={post.title}
-                        clicked={() => this.postSelectedHandler(post.id)}/>
+                return (
+
+                    <Link to={'/' + post.id} key={post.id}>
+                        {/* Key prop needs to always be in the outmost element*/}
+                        <Post
+                            author={post.author}
+                            title={post.title}
+                            clicked={() => this.postSelectedHandler(post.id)}/>
+                    </Link>
+                )
             })
         }
 

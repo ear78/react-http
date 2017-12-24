@@ -1,71 +1,33 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Route, NavLink } from 'react-router-dom';
 
 import './Blog.css';
+import Posts from '../Posts/Posts';
+import NewPost from '../NewPost/NewPost';
 
 class Blog extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            posts: [],
-            selectedPostId: null,
-            error: false
-        }
-    }
-    //using component didmount method for fetching
-    componentDidMount(){
-        axios.get('/posts').then((response) => {
-            const posts = response.data.slice(0,4);
-            const updatedPosts = posts.map(post=> {
-                return {
-                    ...post,
-                    author: 'Elliot'
-                }
-            })
-            this.setState({
-                posts: updatedPosts
-            })
-            // console.log(response.data)
-        }).catch(error => {
-            // console.log(error);
-            this.setState({error: true})
-        })
-    }
-
-    postSelectedHandler = (id) => {
-        this.setState({
-            selectedPostId: id
-        })
-    }
 
     render () {
-        let posts = <p style={{textAlign: 'center'}}>Something Went Wrong!</p>
-        //condition if error occurs or not
-        if(!this.state.error){
-            //iterating over posts to repeat
-            posts = this.state.posts.map(post => {
-                return <Post
-                        key={post.id}
-                        author={post.author}
-                        title={post.title}
-                        clicked={() => this.postSelectedHandler(post.id)}/>
-            })
-        }
-
         return (
             <div className="Blog">
                 <header>
                     <nav>
                         <ul>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/new-post">New Post</a></li>
+                            <li><NavLink to="/" exact>Home</NavLink></li>
+                            {/* or use NavLink as js object notation. you can also build a relative path like so, <NavLink to={props.match.url + '/new'}>  will lead to example.com/posts/new*/}
+                            <li><NavLink to={{
+                                    pathname: '/new-post',
+                                    hash: '#submit',
+                                    search: '?quick-submit=true'
+                                }}>New Post</NavLink></li>
                         </ul>
                     </nav>
                 </header>
-                <section className="Posts">
-                    {posts}
-                </section>
-            
+                {/* use exact for exact matched route and component routing*/}
+                <Route path="/" exact component={Posts} />
+                <Route path="/new-post" component={NewPost} />
+                {/*<Posts />*/}
             </div>
         );
     }

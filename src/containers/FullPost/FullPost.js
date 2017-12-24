@@ -11,10 +11,10 @@ class FullPost extends Component {
         }
     }
     //using this to only update when clicked
-    componentDidUpdate(){
-        if(this.props.id){
+    componentDidMount(){
+        if(this.props.match.params.id){
             if(!this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.id)){
-                axios.get('/posts/' + this.props.id).then((response) => {
+                axios.get('/posts/' + this.props.match.params.id).then((response) => {
                         this.setState({loadedPost: response.data})
                         console.log(response);
                 })

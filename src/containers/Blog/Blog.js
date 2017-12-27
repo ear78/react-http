@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Route, NavLink } from 'react-router-dom';
+import { Route, NavLink, Switch, Redirect } from 'react-router-dom';
 
 import './Blog.css';
 import Posts from '../Posts/Posts';
@@ -15,7 +15,7 @@ class Blog extends Component {
                 <header>
                     <nav>
                         <ul>
-                            <li><NavLink to="/" exact>Home</NavLink></li>
+                            <li><NavLink to="/posts" exact>Home</NavLink></li>
                             {/* or use NavLink as js object notation. you can also build a relative path like so, <NavLink to={props.match.url + '/new'}>  will lead to example.com/posts/new*/}
                             <li><NavLink to={{
                                     pathname: '/new-post',
@@ -25,10 +25,16 @@ class Blog extends Component {
                         </ul>
                     </nav>
                 </header>
-                {/* use exact for exact matched route and component routing*/}
-                <Route path="/" exact component={Posts} />
-                <Route path="/new-post" component={NewPost} />
-                <Route path="/:id" exact component={FullPost} />
+                {/* use exact for exact matched route and component routing. use Switch to match first route instead of loading all 3 routes below, switch will do the router work for you*/}
+                <Switch>
+                    <Route path="/posts" exact component={Posts} />
+                    <Route path="/new-post" component={NewPost} />
+                    <Route path="/:id" exact component={FullPost} />
+                    {/*404 error catchall redirect. use render or component to show 404 page/component */}
+                    <Route render={()=> <h1>Not Found</h1>} />
+                    {/*<Redirect from="/" to="/posts" />*/}
+                </Switch>
+
 
                 {/*<Posts />*/}
             </div>
